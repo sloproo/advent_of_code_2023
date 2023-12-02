@@ -26,4 +26,3 @@ for peli in pelit:
     tulojen_summa += pienimmat["red"] * pienimmat["blue"] * pienimmat["green"]
 
 print(tulojen_summa)
-        
