@@ -50,7 +50,6 @@ for y in range(len(piirros)):
             lukusana = ""
 
 summattavat = 0
-hylatyt = 0
 
 for luku in luvut:
     kaytetty = False
@@ -60,23 +59,11 @@ for luku in luvut:
         if piirros[naapuri[0]][naapuri[1]] != "." and piirros[naapuri[0]][naapuri[1]] not in string.digits:
             summattavat += luku[0]
             kaytetty = True
-            print(f"lisätään luku {luku[0]} koordinaateissa y = {luku[1]}, x = {luku[2]} - {luku[3]} summattaviin")
-            print(f"Koska sen naapuri {naapuri[0]}, {naapuri[1]} on symboli {piirros[naapuri[0]][naapuri[1]]}\n")
-            pass
+            # print(f"lisätään luku {luku[0]} koordinaateissa y = {luku[1]}, x = {luku[2]} - {luku[3]} summattaviin")
+            # print(f"Koska sen naapuri {naapuri[0]}, {naapuri[1]} on symboli {piirros[naapuri[0]][naapuri[1]]}\n")
             break
-    else:
-        print(f"hylätään luku {luku[0]} koordinaateissa y = {luku[1]}, x = {luku[2]} - {luku[3]} summattaviin\n")
-        hylatyt += luku[0]
-        pass
+    # else:
+        # print(f"hylätään luku {luku[0]} koordinaateissa y = {luku[1]}, x = {luku[2]} - {luku[3]} summattaviin\n")
+
 
 print(summattavat)
-print(hylatyt)
-
-print(sum([luku[0] for luku in luvut]))
-
-# print(hylatyt)
-
-# 1763175 liian iso
-# 1761233 liian iso
-# 1759938 liian iso
-# 554003 oikein
