@@ -7,8 +7,6 @@ with open("input.txt") as f:
         voitot, annetut = (puoli.strip() for puoli in r.split("|"))
         kortit.append((1, [int(voitto) for voitto in voitot.split(" ")], [int(annettu) for annettu in annetut.split(" ")]))
 
-voitot = 0
-
 for i in range(len(kortit)):
     osumia = 0
     for annettu in kortit[i][2]:
