@@ -17,10 +17,8 @@ while not maalissa:
         askeleita += 1
         if suunta == "L":
             oma_paikka = haarat[oma_paikka][0]
-            # print(f"Suunta on {suunta}, mennään paikkaan {oma_paikka}")
         elif suunta == "R":
             oma_paikka = haarat[oma_paikka][1]
-            # print(f"Suunta on {suunta}, mennään paikkaan {oma_paikka}")
         if oma_paikka == "ZZZ":
             maalissa = True
             break
