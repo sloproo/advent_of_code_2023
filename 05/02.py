@@ -14,8 +14,8 @@ with open("alku.txt") as f:
             kartta = []
             f.readline()
         else:
-            kohde, lahde, pituus = (r.strip().split(" "))
-            kartta.append((int(kohde), int(lahde), int(pituus)))
+            kohde, lahde, pituus = (int(lukunro) for lukunro in (r.strip().split(" ")))
+            kartta.append((kohde, lahde, pituus, lahde - kohde))
     kartat.append(kartta)
 
 siemenhaarukat = sorted(siemenhaarukat, key= lambda haarukka: haarukka[0])
