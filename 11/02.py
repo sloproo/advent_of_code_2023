@@ -14,8 +14,9 @@ def matka(eka: tuple, toka: tuple, tyhjat_palkit: list = tyhjat_palkit, tyhjat_r
     for x in range(min(eka[1]+1, toka[1]), max([eka[1], toka[1]])):
         if x in tyhjat_palkit:
             ylitettavat_tyhjat_palkit += 1
-                   
-    palautettava += 2 ** 0 * ylitettavat_tyhjat_rivit + 2 ** 0 * ylitettavat_tyhjat_palkit
+
+    kasvukerroin = 1000000
+    palautettava += (kasvukerroin - 1) * (ylitettavat_tyhjat_rivit + ylitettavat_tyhjat_palkit)
     return palautettava
 
 with open("input.txt") as f:
