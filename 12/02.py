@@ -1,10 +1,12 @@
+import re
+
 rivit = []
 
-with open("input.txt") as f:
+with open("alku.txt") as f:
     for r in f:
         jouset, luvut = r.strip().split(" ")
-        jouset = "." + jouset + "."
-        luvut = [int(luku) for luku in luvut.split(",")]
+        jouset = "." + (jouset + "?") * 5 + "."
+        luvut = [int(luku) for luku in luvut.split(",")] * 5
         rivit.append((jouset, luvut))
 
 def kelvollinen(rivi: tuple) -> int:
@@ -24,6 +26,12 @@ def kelvollinen(rivi: tuple) -> int:
 def mahdollisia_rivista(rivi: tuple) -> int:
     mahdollisia = 0
     jouset, luvut = rivi
+
+    for luku in luvut:
+        hakulauseke = re.search(f"(?=([\.\?][#\?]{{{luku}}}[\.\?]))", jouset)
+        pass
+
+
     if "?" in jouset:
         jokeri = jouset.find("?")
         mahdollisia += mahdollisia_rivista((jouset[:jokeri] + "#" + jouset[jokeri+1:], luvut))
@@ -34,8 +42,11 @@ def mahdollisia_rivista(rivi: tuple) -> int:
 
 mahdollisia_kaikkiaan = 0
 
+ratkottu = 0
 for rivi in rivit:
     mahdollisia_kaikkiaan += mahdollisia_rivista(rivi)
+    ratkottu += 0
+    print(f"Rivi {ratkottu} ratkaistu ")
     
 print(mahdollisia_kaikkiaan)
 

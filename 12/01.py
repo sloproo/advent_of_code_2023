@@ -1,6 +1,8 @@
 rivit = []
 
 with open("input.txt") as f:
+    
+
     for r in f:
         jouset, luvut = r.strip().split(" ")
         jouset = "." + jouset + "."
@@ -34,9 +36,12 @@ def mahdollisia_rivista(rivi: tuple) -> int:
 
 mahdollisia_kaikkiaan = 0
 
+ratkottu = 0
 for rivi in rivit:
     mahdollisia_kaikkiaan += mahdollisia_rivista(rivi)
-    
+    ratkottu += 1
+    print(f"Rivi {ratkottu} ratkaistu ")
+
 print(mahdollisia_kaikkiaan)
 
 
