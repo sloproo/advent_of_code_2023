@@ -27,7 +27,7 @@ def naapurit(y: int, x: int, takaisin: bool = False, putkisto: list = putkisto) 
     elif putkisto[y][x] == "F":
         suunnat = ["D", "R"]
     elif putkisto[y][x] == "S":
-        suunnat = ["U", "R", "D", "l"]
+        suunnat = ["U", "R", "D", "L"]
     
     if "U" in suunnat:
         mahdolliset.append((y - 1, x))
@@ -93,9 +93,9 @@ elif (y+1, x) in alun_naapurit and (y, x-1) in alun_naapurit:
 else:
     raise ValueError("Mitäs helvettiä nyt")
 
+# Siistitään silmukkaan kuuluvat roskaputket pois
 
 ulkopuoliset = []
-
 
 for y in range(len(putkisto)):
     for x in range(len(putkisto[y])):
@@ -108,35 +108,135 @@ for y in range(len(putkisto)):
         print(putkisto[y][x], end="")
     print()
 
+
+
 kakkoskierros = [alku]
 oikealla = []
 vasemmalla = []
 
-while True:
-    
-    if len(kakkoskierros) == 1:
-        kakkoskierros.append(naapurit(kakkoskierros[0][0], kakkoskierros[0][1])[0])
+def menosuunta(lahto: tuple, kohde: tuple, putkisto: list = putkisto) -> str:
+    if kohde[0] == lahto[0] + 1:
+        return "D"
+    elif kohde[0] == lahto[0] - 1:
+        return "U"
+    elif kohde[1] == lahto[1] + 1:
+        return "R"
+    elif kohde[1] == lahto[1] -1 :
+        return "L"
     else:
-        if naapurit(kakkoskierros[-1][0], kakkoskierros[-1][1])[0] not in kakkoskierros:
-            kakkoskierros.append(naapurit(kakkoskierros[-1][0], kakkoskierros[-1][1])[0])
-        elif naapurit(kakkoskierros[-1][0], kakkoskierros[-1][1])[1] not in kakkoskierros:
-            kakkoskierros.append(naapurit(kakkoskierros[-1][0], kakkoskierros[-1][1])[1])
+        raise ValueError("Mitäs helvettiä")
+
+kakkoskierros_kesken = True
+
+while kakkoskierros_kesken:
+    lahto = kakkoskierros[-1]
+    if len(kakkoskierros) == 1:
+        kohde = naapurit(lahto[0], lahto[1])[0]
+    else:
+        if naapurit(lahto[0], lahto[1])[0] not in kakkoskierros:
+            kohde = naapurit(lahto[0], lahto[1])[0]
+        elif naapurit(lahto[0], lahto[1])[1] not in kakkoskierros:
+            kohde = naapurit(lahto[0], lahto[1])[1]
+        
         else:
             print("Kakkoskierroksen matka valmis")
-            kakkoskierros.append(alku)
-            break
+            kohde = alku
+            kakkoskierros_kesken = False
 
-for i in range(1, len(kakkoskierros)):
-    lahto = kakkoskierros[i - 1]
-    maali = kakkoskierros[i]
-    if maali[0] - lahto[0] == -1:
-        suunta = "D"
-    elif maali[0] - lahto[0] == 1:
-        suunta = "U"
-    elif maali[1] - lahto[1] == -1:
-        suunta = "L"
-    elif maali[1] - lahto[1] == 1:
-        suunta = "R"
+    suunta = menosuunta(lahto, kohde)
+    if suunta == "R":
+        oikea = (kohde[0] + 1, kohde[1])
+        vasen = (kohde[0] - 1, kohde[1])
+    elif suunta == "D":
+        oikea = (kohde[0], kohde[1] - 1)
+        vasen = (kohde[0], kohde[1] + 1)
+    elif suunta == "L":
+        oikea = (kohde[0] - 1, kohde[1])
+        vasen = (kohde[0] + 1, kohde[1])
+    elif suunta == "U":
+        oikea = (kohde[0], kohde[1] + 1)
+        vasen = (kohde[0], kohde[1] - 1)
     else:
         raise ValueError("Mitäs helvettiä")
     
+    if kelpo(oikea[0], oikea[1]) and oikea not in silmukka and oikea not in oikealla:
+        oikealla.append(oikea)
+    if kelpo(vasen[0], vasen[1]) and vasen not in silmukka and vasen not in vasemmalla:
+        vasemmalla.append(vasen)
+       
+    kakkoskierros.append(kohde)
+
+def ymparoivat(koordinaatti: tuple, putkisto: list = putkisto, silmukka: list = silmukka) -> list:
+    y, x = koordinaatti
+    kaikki = [(y-1, x-1), (y-1, x), (y-1, x+1), (y, x-1), (y, x+1), (y+1, x-1), (y+1, x), (y+1, x+1)]
+    palautettavat = [ehdokas for ehdokas in kaikki if kelpo(ehdokas[0], ehdokas[1])]
+    return palautettavat
+
+while True:
+    oikea_kasvoi = False
+    for oikeanpuoleinen in oikealla:
+        for ymparoiva in ymparoivat(oikeanpuoleinen):
+            if ymparoiva not in silmukka and ymparoiva not in oikealla:
+                oikealla.append(ymparoiva)
+                oikea_kasvoi = True
+    if not oikea_kasvoi:
+        break
+
+while True:
+    vasen_kasvoi = False
+    for vasemmanpuoleinen in vasemmalla:
+        for ymparoiva in ymparoivat(vasemmanpuoleinen):
+            if ymparoiva not in silmukka and ymparoiva not in vasemmalla:
+                vasemmalla.append(ymparoiva)
+                vasen_kasvoi = True
+    if not vasen_kasvoi:
+        break
+
+
+# print(f"Oikealla kasvatettu, {len(oikealla)}")
+# print(oikealla)
+# print(f"Vasemmalla kasvatettu, {len(vasemmalla)}")
+# print(vasemmalla)
+# pass
+
+for koordinaatit in oikealla:
+    if koordinaatit[0] == 0 or koordinaatit[1] == 0:
+        print("Oikea ei käy")
+        print(f"Haettu ruutujen määrä = {len(vasemmalla)}")
+        break
+
+for koordinaatit in vasemmalla:
+    if koordinaatit[0] == 0 or koordinaatit[1] == 0:
+        print("Vasen ei käy")
+        print(f"Haettu ruutujen määrä = {len(oikealla)}")
+        break
+
+pass
+
+for y in range(len(putkisto)):
+    for x in range(len(putkisto[y])):
+        if (y, x) not in silmukka and (y, x) not in oikealla and (y, x) not in vasemmalla:
+            print(f"Koordinaattia {y}, {x} ei ole missään")
+
+# 346 348 liian pieni
+
+# for koordinaatit in oikealla:
+#     y, x = koordinaatit
+#     putkisto[y][x] = "█"
+
+# for koordinaatit in vasemmalla:
+#     y, x = koordinaatit
+#     putkisto[y][x] = " "
+
+# for koordinaatit in silmukka:
+#     putkisto[y][x] = "."
+
+# for y in range(len(putkisto)):
+#     for x in range(len(putkisto[y])):
+#         print(putkisto[y][x], end="")
+#     print()
+
+# for y in range(len(putkisto)):
+#     for x in range(len(putkisto[y])):
+#         if putkisto[y][x] not in [["█", " ", "."]]:
+#             pass
